@@ -1,0 +1,9 @@
+#+TITLE: README
+
+Install the NodeJS package ~imapnotify~ 
+
+#+BEGIN_SRC shell
+trizen -S nodejs-imapnotify
+#+END_SRC
+
+Expects ~~/.config/imap_notify/config.js~
