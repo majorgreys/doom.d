@@ -7,12 +7,12 @@
     :name 'email
     :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
   (prodigy-define-service
-    :name "imapnotify-gmail"
+    :name "imapnotify-fastmail"
     :command "imapnotify"
-    :args (list "-c" (expand-file-name "imapnotify.js" (getenv "HOME")))
+    :args (list "-c" (expand-file-name ".config/imap_notify/fastmail-config.js" (getenv "HOME")))
     :tags '(email)
     :kill-signal 'sigkill)
-  (prodigy-start-service (prodigy-find-service "imapnotify-gmail")))
+  (prodigy-start-service (prodigy-find-service "imapnotify-fastmail")))
 
 ;;;; Notmuch
 (def-package! notmuch
@@ -44,9 +44,7 @@
                                (propertize tag 'face 'notmuch-tag-unread)))
         notmuch-hello-sections '(notmuch-hello-insert-saved-searches
                                  notmuch-hello-insert-alltags)
-        notmuch-saved-searches '((:name "kevin"   :query "(from:kevin or (from:fuxialexander and to:kevin)) " :key "k")
-                                 (:name "hscr"    :query "tag:hscr"                                           :key "h")
-                                 (:name "inbox"   :query "tag:inbox not tag:trash"                            :key "i")
+        notmuch-saved-searches '((:name "inbox"   :query "tag:inbox not tag:trash"                            :key "i")
                                  (:name "flagged" :query "tag:flagged"                                        :key "f")
                                  (:name "sent"    :query "tag:sent"                                           :key "s")
                                  (:name "drafts"  :query "tag:draft"                                          :key "d"))

@@ -77,5 +77,7 @@
           :nm "s"   #'elfeed-show-new-live-search
           :nm "y"   #'elfeed-show-yank)))
 
+(load! +bindings)
+
 (provide 'config)
 ;;; config.el ends here
