@@ -3,22 +3,10 @@
 (setq user-mail-address "tahir@tahirbutt.com"
       user-full-name    "Tahir H. Butt"
 
-      doom-themes-enable-bold t
-      doom-themes-enable-italic t
-      doom-font (font-spec :family "IBM Plex Mono" :size 16)
-      doom-variable-pitch-font (font-spec :family "IBM Plex Sans" :size 14)
-      doom-unicode-font (font-spec :family "Source Code Pro" :size 16)
-      doom-big-font (font-spec :family "IBM Plex Mono" :size 20)
-      doom-line-numbers-style nil
-      ivy-posframe-font (font-spec :family "Input Mono Narrow" :size 16)
-      ivy-height 12
       +rss-elfeed-files '("elfeed.org")
       ;; shr-use-fonts nil ;; for elfeed variable fonts
-
       org-ellipsis " + "
-
       +write-text-scale 1.5
-      doom-theme 'doom-nord
       )
 
 

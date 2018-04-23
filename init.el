@@ -121,3 +121,39 @@
        ;; and additional ex commands for evil-mode. Use it as a reference for
        ;; your own modules.
        (default +snippets +evil-commands))
+
+;; * UI
+(setq
+ frame-title-format
+ '("emacs%@"
+   (:eval (system-name)) ": "
+   (:eval (if (buffer-file-name)
+              (abbreviate-file-name (buffer-file-name))
+            "%b")))
+ ;; doom-font (font-spec :family "SF Mono" :size 12)
+ doom-font (font-spec :family "IBM Plex Mono" :size 16)
+ doom-variable-pitch-font (font-spec
+  ;; :family "SF Compact Display"
+  :family "IBM Plex Sans"
+  :size 14
+  :width 'extra-condensed
+  :weight 'normal
+  :slant 'normal
+  :registry "iso10646-1")
+ doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 12)
+ ;; doom-big-font (font-spec :family "SF Mono" :size 16)
+ doom-big-font (font-spec :family "IBM Plex Mono" :size 20)
+ ovp-font "Iosevka"
+ doom-theme 'doom-nord
+ doom-line-numbers-style nil
+ +doom-modeline-buffer-file-name-style 'truncate-upto-project
+ doom-neotree-enable-variable-pitch t
+ doom-neotree-project-size 1.2
+ doom-neotree-line-spacing 0
+ doom-neotree-folder-size 1.0
+ doom-neotree-chevron-size 0.6
+ scroll-conservatively 0
+ indicate-buffer-boundaries nil
+ frame-alpha-lower-limit 0
+ indicate-empty-lines nil
+ which-key-idle-delay 0.3)

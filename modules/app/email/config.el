@@ -54,7 +54,7 @@
   (set! :evil-state 'notmuch-search-mode 'normal)
   (set! :evil-state 'notmuch-tree-mode 'normal)
   (set! :evil-state 'notmuch-message-mode 'normal)
-  ;; (add-hook 'notmuch-show-hook 'variable-pitch-mode)
+  (add-hook 'notmuch-show-hook 'variable-pitch-mode)
   ;; (add-hook 'notmuch-tree-mode-hook '+mail/buffer-face-mode-notmuch)
   ;; (add-hook 'notmuch-search-mode-hook '+mail/buffer-face-mode-notmuch)
   ;; (add-hook 'notmuch-message-mode-hook '+mail/buffer-face-mode-notmuch)
