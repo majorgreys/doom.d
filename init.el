@@ -56,9 +56,10 @@
       ;password-store    ; password manager for nerds
        pdf               ; pdf enhancements
        rotate-text       ; cycle region at point between text candidates
-      ;term              ; terminals in Emacs
-      ;tmux              ; an API for interacting with tmux
+       term              ; terminals in Emacs
+       tmux              ; an API for interacting with tmux
       ;upload            ; map local to remote projects via ssh/ftp
+       references        ; handle references inside org
 
        :lang
       ;assembly          ; assembly for fun or debugging
@@ -129,22 +130,11 @@
         (:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name))
                  "%b")))
-      doom-font (font-spec
-                 :family "Iosevka"
-                 :size 16
-                 :weight 'normal
-                 :slant 'normal
-                 :registry "iso10646-1")
-      doom-variable-pitch-font (font-spec
-                                :family "Input Sans"
-                                :size 14
-                                :width 'narrow
-                                :weight 'normal
-                                :slant 'normal
-                                :registry "iso10646-1")
-      doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 12)
-      doom-big-font (font-spec :family "Iosevka" :size 22)
-      ovp-font "Iosevka"
+      doom-font (font-spec :family "Input Mono Narrow" :size 16 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "Input Sans" :size 14 :weight 'normal)
+      doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 12 :weight 'normal)
+      doom-big-font (font-spec :family "Input Mono Narrow" :size 16 :weight 'normal)
+      ovp-font "Iosevka Term"
       doom-theme 'doom-city-lights
       doom-line-numbers-style nil
       +doom-modeline-buffer-file-name-style 'truncate-upto-project
