@@ -133,7 +133,7 @@
       doom-font (font-spec :family "Input Mono Narrow" :size 16 :weight 'semi-light)
       doom-variable-pitch-font (font-spec :family "Input Sans" :size 14 :weight 'normal)
       doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 12 :weight 'normal)
-      doom-big-font (font-spec :family "Input Mono Narrow" :size 16 :weight 'normal)
+      doom-big-font (font-spec :family "Input Mono Narrow" :size 22 :weight 'normal)
       ovp-font "Iosevka Term"
       doom-theme 'doom-city-lights
       doom-line-numbers-style nil
