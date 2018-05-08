@@ -82,5 +82,5 @@
 (def-package! elfeed-org
   :commands (elfeed-org)
   :config
-  (setq rmh-elfeed-org-files '("~/.config/doom/modules/app/rss/elfeed.org"))
+  (setq rmh-elfeed-org-files '("~/.doom.d/modules/app/rss/elfeed.org"))
   (elfeed-org))
