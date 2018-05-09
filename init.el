@@ -24,7 +24,7 @@
 
        :completion
        company           ; the ultimate code completion backend
-       ivy               ; a search engine for love and life
+       (ivy +childframe) ; a search engine for love and life
       ;helm              ; the *other* search engine for love and life
       ;ido               ; the other *other* search engine...
 
@@ -40,7 +40,6 @@
       ;tabbar            ; FIXME an (incomplete) tab bar for Emacs
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
-       posframe          ; use child frames where possible (Emacs 26+ only)
 
        :tools
        dired             ; making dired pretty [functional]
