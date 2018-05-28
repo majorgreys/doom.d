@@ -19,7 +19,18 @@
 
 (setq +org-dir (expand-file-name "~/Dropbox/org/"))
 
+(def-package! ob-ipython
+  :after (org ob)
+  :config
+  (setq ob-ipython-resources-dir ".ob-ipython-resrc/")
+  (setq ob-ipython-command "/opt/anaconda/bin/jupyter"))
+
 (after! org
+  (setq +org-babel-mode-alist
+        '(("ipython" . ipython)
+          ("bash" . shell)
+          ("sh" . shell)))
+
   (setq org-capture-templates
         '(("t" "Todo" entry
            (file+headline +org-default-todo-file "Inbox")
@@ -31,10 +42,25 @@
 
           ("n" "Notes" entry
            (file+headline +org-default-notes-file "Inbox")
-           "* %u %?\n %i" :prepend t :kill-buffer t))))
+           "* %u %?\n %i" :prepend t :kill-buffer t)
+
+          ("ld" "Liwwa: Daily Scrum" entry
+           (file+olp "liwwa.org" "Daily Scrums")
+           "* %u\nSince last scrum\n- %?\nNext:\n-" :prepend t :kill-buffer t)
+
+          ("ln" "Liwwa: Note" entry
+           (file+headline "liwwa.org" "Notes")
+           "* %u %?\n %i" :prepend t :kill-buffer t)
+          )
+        )
+  )
 
 (def-package! ace-link
   :commands (ace-link ace-link-eww ace-link-elfeed))
+
+(def-package! zotxt
+  :config
+  (setq zotxt-default-bibliography-style "chicago-note-bibliography"))
 
 (def-package! org-zotxt
   :commands org-zotxt-mode
@@ -65,7 +91,48 @@
           :nm "s"   #'elfeed-show-new-live-search
           :nm "y"   #'elfeed-show-yank)))
 
-(load! +bindings)
+(def-package! conda
+  :commands (conda-env-activate-for-buffer)
+  :config
+  (setq conda-anaconda-home "/opt/anaconda")
+  (conda-env-autoactivate-mode -1)
+  ;; (add-hook 'python-mode-hook #'conda-env-activate-for-buffer)
+  (conda-env-initialize-interactive-shells)
+  (conda-env-initialize-eshell)
+    ;; Version management with pyenv
+  (defun +python|add-version-to-modeline ()
+    "Add version string to the major mode in the modeline."
+    (setq mode-name
+          (if conda-env-current-name
+              (format "Py:conda:%s" conda-env-current-name)
+            "Python")))
+  (add-hook 'conda-postactivate-hook #'+python|add-version-to-modeline)
+  (add-hook 'conda-postdeactivate-hook #'+python|add-version-to-modeline))
+
+(add-to-list 'auto-mode-alist '("\\.jinja$" . web-mode))
+
+;; (def-package! yapfify
+;;   :hook (python-mode yapf-mode))
+
+(def-package! pipenv
+  :config
+  (add-hook 'python-mode-hook #'pipenv-mode)
+  (setq pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended))
+
+(def-package! py-autopep8
+  :config
+  (add-hook 'python-mode-hook #'py-autopep8-enable-on-save))
+
+(def-package! py-isort
+  :config
+  (add-hook 'python-mode-hook #'py-isort-buffer))
+
+;; (def-package! auto-virtualenvwrapper
+;;   :config
+;;   (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate))
+
+(after! ein
+  (setq ein:jupyter-default-notebook-directory "~/"))
 
 (provide 'config)
 ;;; config.el ends here

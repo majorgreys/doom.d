@@ -1,9 +1,12 @@
-;;; packages.el --- description -*- lexical-binding: t; -*-
-
+;; -*- no-byte-compile: t; -*-
 (package! zotxt)
 (package! shr-tag-pre-highlight)
-(package! html2org)
-;; (package! evil-snipe :disable t)
-
-(provide 'packages)
-;;; packages.el ends here
+(package! ob-ipython)
+(package! py-yapf)
+(package! yapfify)
+(package! py-isort)
+(package! py-autopep8)
+(package! virtualenvwrapper)
+(package! auto-virtualenvwrapper)
+(package! pipenv)
+(package! conda)
