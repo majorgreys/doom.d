@@ -45,12 +45,12 @@
            "* %u %?\n %i" :prepend t :kill-buffer t)
 
           ("ld" "Liwwa: Daily Scrum" entry
-           (file+olp "liwwa.org" "Daily Scrums")
-           "* %u\nSince last scrum\n- %?\nNext:\n-" :prepend t :kill-buffer t)
+           (file+olp+datetree "liwwa.org" "Journal")
+           "* Logged at %U :scrum:\nSince last scrum\n- %?\nNext:\n-" :prepend t :kill-buffer t)
 
           ("ln" "Liwwa: Note" entry
-           (file+headline "liwwa.org" "Notes")
-           "* %u %?\n %i" :prepend t :kill-buffer t)
+           (file+olp+datetree "liwwa.org" "Journal")
+           "* %? :note:\n %i" :prepend t :kill-buffer t)
           )
         )
   )
@@ -94,9 +94,9 @@
 (def-package! conda
   :commands (conda-env-activate-for-buffer)
   :config
-  (setq conda-anaconda-home "/opt/anaconda")
+  (setq conda-anaconda-home "~/.conda/")
   (conda-env-autoactivate-mode -1)
-  ;; (add-hook 'python-mode-hook #'conda-env-activate-for-buffer)
+  (add-hook 'python-mode-hook #'conda-env-activate-for-buffer)
   (conda-env-initialize-interactive-shells)
   (conda-env-initialize-eshell)
     ;; Version management with pyenv
