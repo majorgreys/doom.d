@@ -2,6 +2,9 @@
 
 ;; ** Prodigy
 (def-package! prodigy
+  :commands (prodigy
+             prodigy-find-service
+             prodigy-start-service)
   :config
   (prodigy-define-tag
     :name 'email
@@ -11,8 +14,15 @@
     :command "imapnotify"
     :args (list "-c" (expand-file-name ".config/imap_notify/fastmail-config.js" (getenv "HOME")))
     :tags '(email)
-    :kill-signal 'sigkill)
-  (prodigy-start-service (prodigy-find-service "imapnotify-fastmail")))
+    :kill-signal 'sigkill))
+
+(run-with-idle-timer
+ 10
+ nil
+ (lambda!
+  (prodigy-start-service
+   (prodigy-find-service
+    "imapnotify-gmail"))))
 
 ;;;; Notmuch
 (def-package! notmuch
@@ -39,7 +49,11 @@
                                        ("count" . "%-7s ")
                                        ("authors" . "%-30s ")
                                        ("subject" . "%-100s ")
-                                       ("tags" . "(%s)"))
+                                       ("tags" . "%s"))
+        notmuch-tree-result-format '(("date" . "%12s  ")
+                                     ("authors" . "%-20s")
+                                     ((("tree" . "%s") ("subject" . "%s")) . "%-54s ")
+                                     ("tags" . "%s"))
         notmuch-tag-formats '(("unread"
                                (propertize tag 'face 'notmuch-tag-unread)))
         notmuch-hello-sections '(notmuch-hello-insert-saved-searches
@@ -49,29 +63,30 @@
                                  (:name "sent"    :query "tag:sent"                                           :key "s")
                                  (:name "drafts"  :query "tag:draft"                                          :key "d"))
         notmuch-archive-tags '("-inbox" "-unread"))
-  (set! :evil-state 'notmuch-hello-mode 'normal)
-  (set! :evil-state 'notmuch-show-mode 'normal)
-  (set! :evil-state 'notmuch-search-mode 'normal)
-  (set! :evil-state 'notmuch-tree-mode 'normal)
-  (set! :evil-state 'notmuch-message-mode 'normal)
-  (add-hook 'notmuch-show-hook 'variable-pitch-mode)
-  ;; (add-hook 'notmuch-tree-mode-hook '+mail/buffer-face-mode-notmuch)
-  ;; (add-hook 'notmuch-search-mode-hook '+mail/buffer-face-mode-notmuch)
-  ;; (add-hook 'notmuch-message-mode-hook '+mail/buffer-face-mode-notmuch)
+  (set-evil-initial-state! 'notmuch-hello-mode 'normal)
+  (set-evil-initial-state! 'notmuch-show-mode 'normal)
+  (set-evil-initial-state! 'notmuch-search-mode 'normal)
+  (set-evil-initial-state! 'notmuch-tree-mode 'normal)
+  (set-evil-initial-state! 'notmuch-message-mode 'normal)
+  (add-hook 'notmuch-tree-mode-hook #'+mail/buffer-face-mode-notmuch)
+  (add-hook 'notmuch-search-hook #'+mail/buffer-face-mode-notmuch)
+  (add-hook 'notmuch-message-mode-hook 'variable-pitch-mode)
+  ;; (add-hook 'notmuch-message-mode-hook #'+mail/buffer-face-mode-notmuch)
   (add-hook 'notmuch-message-mode-hook (lambda () (set (make-local-variable 'company-backends) '(notmuch-company (company-ispell :with company-yasnippet)))))
   (add-hook 'notmuch-tree-mode-hook (lambda () (setq-local line-spacing nil)))
   (remove-hook 'message-mode-hook #'turn-on-auto-fill)
   (remove-hook 'notmuch-message-mode-hook #'turn-on-auto-fill)
-  (push 'notmuch-tree-mode evil-snipe-disabled-modes)
-  (push 'notmuch-hello-mode evil-snipe-disabled-modes)
-  (push 'notmuch-search-mode evil-snipe-disabled-modes)
-  (push 'notmuch-show-mode evil-snipe-disabled-modes)
+  (after! evil-snipe
+    (push 'notmuch-tree-mode evil-snipe-disabled-modes)
+    (push 'notmuch-hello-mode evil-snipe-disabled-modes)
+    (push 'notmuch-search-mode evil-snipe-disabled-modes)
+    (push 'notmuch-show-mode evil-snipe-disabled-modes))
   (advice-add #'notmuch-start-notmuch-sentinel :override #'+mail/notmuch-start-notmuch-sentinel)
   (advice-add #'notmuch-show :override #'+mail/notmuch-show-reuse-buffer)
   (advice-add #'notmuch-hello-insert-searches :override #'+mail/notmuch-hello-insert-searches)
   (advice-add #'notmuch-hello-insert-saved-searches :override #'+mail/notmuch-hello-insert-saved-searches)
   (advice-add #'notmuch-hello-insert-buttons :override #'+mail/notmuch-hello-insert-buttons)
-  ;; (set! :popup "\\*notmuch-hello\\*" '((size . 20) (side . left)) '((quit . t) (modeline . nil)))
+  ;; (set-popup-rule! "\\*notmuch-hello\\*" :size 20 :side 'left :quit t)
   (push (lambda (buf) (string-match-p "^\\*notmuch" (buffer-name buf)))
         doom-real-buffer-functions)
 
@@ -118,6 +133,7 @@
             :nmv "R"   #'notmuch-search-reply-to-thread-sender
             :nmv "r"   #'notmuch-search-reply-to-thread
             :nmv "s"   #'counsel-notmuch
+            :nmv "S"   #'notmuch-search
             :nmv "x"   #'+mail/notmuch-search-spam)
           (:map notmuch-tree-mode-map
             :nmv "j"   #'notmuch-tree-next-message
@@ -149,4 +165,7 @@
 ;;;; org-mime
 (def-package! org-mime
   :after (org notmuch)
-  :config (setq org-mime-library 'mml))
+  :config
+  (setq
+   org-mime-library 'mml
+   org-mime-export-options '(:section-numbers nil :with-author nil :with-toc nil)))
