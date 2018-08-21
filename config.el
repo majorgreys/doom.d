@@ -29,7 +29,11 @@
   (setq +org-babel-mode-alist
         '(("ipython" . ipython)
           ("bash" . shell)
+          ("plantuml" . t)
           ("sh" . shell)))
+
+  (setq org-plantuml-jar-path
+      (expand-file-name "/opt/plantuml/plantuml.jar"))
 
   (setq org-capture-templates
         '(("t" "Todo" entry
@@ -53,6 +57,10 @@
            "* %? :note:\n %i" :prepend t :kill-buffer t)
           )
         )
+
+  (autoload 'magit--display-buffer-fullframe "magit-mode")
+  (advice-remove #'org-capture-place-template #'+popup*suppress-delete-other-windows)
+  (set-popup-rule! "^CAPTURE.*\\.org$" :actions '(magit--display-buffer-fullframe) :quit nil)
   )
 
 (def-package! ace-link
@@ -123,9 +131,9 @@
   :config
   (add-hook 'python-mode-hook #'py-autopep8-enable-on-save))
 
-(def-package! py-isort
+(def-package! python
   :config
-  (add-hook 'python-mode-hook #'py-isort-buffer))
+  (add-hook 'before-save-hook #'py-isort-before-save))
 
 ;; (def-package! auto-virtualenvwrapper
 ;;   :config

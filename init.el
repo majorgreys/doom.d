@@ -12,17 +12,16 @@
        spellcheck        ; tasing you for misspelling mispelling
        (syntax-checker   ; tasing you for every semicolon you forget
         +childframe)     ; use childframes for error popups (Emacs 26+ only)
-       version-control   ; remember, remember that commit in November
        workspaces        ; tab emulation, persistence & separate workspaces
 
        :completion
        (company          ; the ultimate code completion backend
-        +auto            ; as-you-type code completion
-        +childframe)     ; a nicer company UI (Emacs 26+ only)
-      ;helm              ; the *other* search engine for love and life
+        +auto)           ; as-you-type code completion
+      ;(helm             ; the *other* search engine for love and life
+      ; +fuzzy)          ; enable fuzzy search backend for helm
       ;ido               ; the other *other* search engine...
        (ivy              ; a search engine for love and life
-        +childframe)     ; uses childframes for popups (Emacs 26+ only)
+        +fuzzy)          ; enable fuzzy search backend for ivy
 
        :ui
        doom              ; what makes DOOM look the way it does
@@ -30,24 +29,34 @@
        doom-modeline     ; a snazzy Atom-inspired mode-line
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
        evil-goggles      ; display visual hints when editing in evil
+      ;fci               ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE tags
        nav-flash         ; blink the current line after jumping
-       neotree           ; a project drawer, like NERDTree for vim
+       ;neotree           ; a project drawer, like NERDTree for vim
+       treemacs          ; a project drawer, like neotree but cooler
        (popup            ; tame sudden yet inevitable temporary windows
         +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
+      ;pretty-code       ; replace bits of code with pretty symbols
       ;tabbar            ; FIXME an (incomplete) tab bar for Emacs
       ;unicode           ; extended unicode support for various languages
+       vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
+
+       :editor
+      ;parinfer          ; turn lisp into python, sort of
+       rotate-text       ; cycle region at point between text candidates
 
        :emacs
        dired             ; making dired pretty [functional]
        ediff             ; comparing files in Emacs
-       electric-indent   ; smarter, keyword-based electric-indent
+       electric          ; smarter, keyword-based electric-indent
        eshell            ; a consistent, cross-platform shell (WIP)
+       hideshow          ; basic code-folding support
        imenu             ; an imenu sidebar and searchable code index
        term              ; terminals in Emacs
+       vc                ; version-control and Emacs, sitting in a tree
 
        :tools
        editorconfig      ; let someone else argue about tabs vs spaces
@@ -60,15 +69,16 @@
        pdf               ; pdf enhancements
       ;prodigy           ; FIXME managing external services & code builders
        rgb               ; creating color strings
-       rotate-text       ; cycle region at point between text candidates
        tmux              ; an API for interacting with tmux
        upload            ; map local to remote projects via ssh/ftp
+      ;wakatime
 
        :lang
       ;assembly          ; assembly for fun or debugging
-      ;cc                ; C/C++/Obj-C madness
-      ;crystal           ; ruby at the speed of c
+      ;(cc +irony +rtags); C/C++/Obj-C madness
       ;clojure           ; java with a lisp
+      ;common-lisp       ; if you've seen one lisp, you've seen them all
+      ;crystal           ; ruby at the speed of c
       ;csharp            ; unity, .NET, and mono shenanigans
        data              ; config/data formats
       ;erlang            ; an elegant language for a more civilized age
@@ -94,18 +104,19 @@
         +babel           ; running code in org
         +capture         ; org-capture in and outside of Emacs
         +export          ; Exporting org to whatever you want
-        +present         ; Emacs for presentations
-        +publish)        ; Emacs+Org as a static site generator
+        +present)        ; Emacs for presentations
       ;perl              ; write code no one else can comprehend
-       php               ; perl's insecure younger brother
-      ;plantuml          ; diagrams for confusing people more
+      ;php               ; perl's insecure younger brother
+       plantuml          ; diagrams for confusing people more
       ;purescript        ; javascript, but functional
        python            ; beautiful is better than ugly
+      ;qt                ; the 'cutest' gui framework ever
+      ;racket            ; a DSL for DSLs
       ;rest              ; Emacs as a REST client
       ;ruby              ; 1.step do {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
       ;scala             ; java, but good
-       sh                ; she sells (ba|z)sh shells on the C xor
+       (sh +fish)        ; she sells (ba|z)sh shells on the C xor
       ;solidity          ; do you need a blockchain? No.
       ;swift             ; who asked for emoji variables?
        web               ; the tubes
@@ -117,7 +128,7 @@
        email             ; emacs as an email client
       ;irc               ; how neckbeards socialize
       (rss +org)        ; emacs as an RSS reader
-      twitter           ; twitter client https://twitter.com/vnought
+      ;twitter           ; twitter client https://twitter.com/vnought
       (write            ; emacs as a word processor (latex + org + markdown)
        +wordnut         ; wordnet (wn) search
        +langtool)       ; a proofreader (grammar/style check) for Emacs
@@ -143,7 +154,7 @@
       doom-font (font-spec :family "Input Mono Narrow" :size 16 :weight 'semi-light)
       doom-variable-pitch-font (font-spec :family "Input Sans Narrow" :size 14 :weight 'normal)
       doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 12 :weight 'normal)
-      doom-big-font (font-spec :family "Input Mono Narrow" :size 22 :weight 'normal)
+      doom-big-font (font-spec :family "Input Mono Narrow" :size 22 :weight 'semi-light)
       ovp-font "Iosevka Term"
       doom-theme 'doom-city-lights
       doom-line-numbers-style nil
@@ -158,3 +169,18 @@
       frame-alpha-lower-limit 0
       indicate-empty-lines nil
       which-key-idle-delay 0.3)
+
+;; load heavy packages all sneaky breeky like
+(defun auto-require-packages (packages)
+  (let* ((reqs (cl-remove-if #'featurep packages))
+         (req (pop reqs)))
+    (when req
+      (require req)
+      (when reqs
+        (run-with-idle-timer 1 nil #'auto-require-packages reqs)))))
+
+(run-with-idle-timer 1 nil #'auto-require-packages
+                     '(calendar find-func format-spec org-macs org-compat
+                       org-faces org-entities org-list org-pcomplete org-src
+                       org-footnote org-macro ob org org-clock org-agenda
+                       org-capture with-editor git-commit package magit))

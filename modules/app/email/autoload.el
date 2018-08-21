@@ -26,7 +26,7 @@
 (defun +mail/buffer-face-mode-notmuch-show ()
   "Sets a fixed width (monospace) font in current buffer"
   (interactive)
-  (setq buffer-face-mode-face '(:family "Charter" :height 1.2))
+  (setq buffer-face-mode-face '(:family "Input Sans Narrow" :size 14 :weight 'semi-light))
   (buffer-face-mode)
   (setq-local line-spacing 0.5))
 
@@ -34,7 +34,7 @@
 (defun +mail/buffer-face-mode-notmuch ()
   "Sets a fixed width (monospace) font in current buffer"
   (interactive)
-  (let ((buffer-face-mode-face '(:family "Input Mono Narrow" :height 1.0)))
+  (let ((buffer-face-mode-face '(:family "Input Mono Narrow" :size 16 :weight 'semi-light)))
     (buffer-face-mode)
     (setq-local line-spacing 0.2)))
 
