@@ -1,14 +1,44 @@
 ;;; config.el --- description -*- lexical-binding: t; -*-
 
-(setq user-mail-address "tahir@tahirbutt.com"
+(setq-default
+      user-mail-address "tahir@tahirbutt.com"
       user-full-name    "Tahir H. Butt"
+      doom-font (font-spec :family "Input Mono Narrow" :size 14 :weight 'ultralight)
+      doom-variable-pitch-font (font-spec :family "Input Sans Narrow" :size 14 :weight 'normal)
+      doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 12 :weight 'normal)
+      doom-big-font (font-spec :family "Input Mono Narrow" :size 22 :weight 'ultralight)
+      ovp-font "Iosevka Term"
+      doom-theme 'doom-city-lights)
 
-      +rss-elfeed-files '("elfeed.org")
-      ;; shr-use-fonts nil ;; for elfeed variable fonts
-      org-ellipsis " + "
-      +write-text-scale 1.5
-      )
+(add-to-list 'default-frame-alist
+             '(ns-transparent-titlebar . t))
 
+(add-to-list 'default-frame-alist
+             '(ns-appearance . dark))
+
+;; load heavy packages all sneaky breeky like
+(defun auto-require-packages (packages)
+  (let ((gc-cons-threshold doom-gc-cons-upper-limit)
+        file-name-handler-alist)
+    (let* ((reqs (cl-remove-if #'featurep packages))
+           (req (pop reqs)))
+      (when req
+        (require req)
+        (when reqs
+          (run-with-idle-timer 1 nil #'auto-require-packages reqs))))))
+
+(run-with-idle-timer 1 nil #'auto-require-packages
+                     '(calendar find-func format-spec org-macs org-compat
+                       org-faces org-entities org-list org-pcomplete org-src
+                       org-footnote org-macro ob org org-clock org-agenda
+                       org-capture with-editor git-commit package magit))
+
+
+;; lang/org
+(setq org-directory (expand-file-name "~/Dropbox/org/")
+      org-agenda-files (list org-directory)
+      org-ellipsis " ▼ "
+      org-bullets-bullet-list '("#"))
 
 (after! ox-pandoc
   (setq org-pandoc-options
@@ -16,8 +46,6 @@
           (mathjax . t)))
   (setq org-pandoc-options-for-latex-pdf
         '((pdf-engine . "xelatex"))))
-
-(setq +org-dir (expand-file-name "~/Dropbox/org/"))
 
 (def-package! ob-ipython
   :after (org ob)
@@ -55,13 +83,15 @@
           ("ln" "Liwwa: Note" entry
            (file+olp+datetree "liwwa.org" "Journal")
            "* %? :note:\n %i" :prepend t :kill-buffer t)
-          )
-        )
+
+          ("lt" "Liwwa: Todo" entry
+           (file+headline "liwwa.org" "Todo")
+           "* TODO %?\n %i\n %a" :prepend t :kill-buffer t)
+          ))
 
   (autoload 'magit--display-buffer-fullframe "magit-mode")
   (advice-remove #'org-capture-place-template #'+popup*suppress-delete-other-windows)
-  (set-popup-rule! "^CAPTURE.*\\.org$" :actions '(magit--display-buffer-fullframe) :quit nil)
-  )
+  (set-popup-rule! "^CAPTURE.*\\.org$" :actions '(magit--display-buffer-fullframe) :quit nil))
 
 (def-package! ace-link
   :commands (ace-link ace-link-eww ace-link-elfeed))
@@ -119,14 +149,6 @@
 
 (add-to-list 'auto-mode-alist '("\\.jinja$" . web-mode))
 
-;; (def-package! yapfify
-;;   :hook (python-mode yapf-mode))
-
-(def-package! pipenv
-  :config
-  (add-hook 'python-mode-hook #'pipenv-mode)
-  (setq pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended))
-
 (def-package! py-autopep8
   :config
   (add-hook 'python-mode-hook #'py-autopep8-enable-on-save))
@@ -135,12 +157,19 @@
   :config
   (add-hook 'before-save-hook #'py-isort-before-save))
 
-;; (def-package! auto-virtualenvwrapper
-;;   :config
-;;   (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate))
+(def-package! auto-virtualenvwrapper
+  :config
+  (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate))
 
 (after! ein
   (setq ein:jupyter-default-notebook-directory "~/"))
+
+(after! tramp-sh
+  (setq tramp-default-method "ssh"
+        tramp-default-proxies-alist
+        '(("liwwa-vm" nil "/ssh:liwwa-vm:"))
+        tramp-debug-buffer t
+        tramp-verbose 10))
 
 (provide 'config)
 ;;; config.el ends here

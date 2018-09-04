@@ -11,7 +11,8 @@
        snippets          ; my elves. They type so I don't have to
        spellcheck        ; tasing you for misspelling mispelling
        (syntax-checker   ; tasing you for every semicolon you forget
-        +childframe)     ; use childframes for error popups (Emacs 26+ only)
+        ;+childframe)     ; use childframes for error popups (Emacs 26+ only)
+       )
        workspaces        ; tab emulation, persistence & separate workspaces
 
        :completion
@@ -37,14 +38,15 @@
        (popup            ; tame sudden yet inevitable temporary windows
         +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
-      ;pretty-code       ; replace bits of code with pretty symbols
+       pretty-code       ; replace bits of code with pretty symbols
       ;tabbar            ; FIXME an (incomplete) tab bar for Emacs
-      ;unicode           ; extended unicode support for various languages
+       unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
 
        :editor
+       format
       ;parinfer          ; turn lisp into python, sort of
        rotate-text       ; cycle region at point between text candidates
 
@@ -55,7 +57,7 @@
        eshell            ; a consistent, cross-platform shell (WIP)
        hideshow          ; basic code-folding support
        imenu             ; an imenu sidebar and searchable code index
-       term              ; terminals in Emacs
+       ;term              ; terminals in Emacs
        vc                ; version-control and Emacs, sitting in a tree
 
        :tools
@@ -63,19 +65,19 @@
        ein               ; tame Jupyter notebooks with emacs
       ;gist              ; interacting with github gists
       ;macos             ; MacOS-specific commands
-       make              ; run make tasks from Emacs
+      ;make              ; run make tasks from Emacs
        magit             ;
       ;password-store    ; password manager for nerds
        pdf               ; pdf enhancements
       ;prodigy           ; FIXME managing external services & code builders
        rgb               ; creating color strings
-       tmux              ; an API for interacting with tmux
-       upload            ; map local to remote projects via ssh/ftp
+      ;tmux              ; an API for interacting with tmux
+      ;upload            ; map local to remote projects via ssh/ftp
       ;wakatime
 
        :lang
       ;assembly          ; assembly for fun or debugging
-      ;(cc +irony +rtags); C/C++/Obj-C madness
+      (cc +irony +rtags); C/C++/Obj-C madness
       ;clojure           ; java with a lisp
       ;common-lisp       ; if you've seen one lisp, you've seen them all
       ;crystal           ; ruby at the speed of c
@@ -97,7 +99,7 @@
       ;lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
       ;nim               ; python + lisp at the speed of c
-      ;nix               ; I hereby declare "nix geht mehr!"
+      nix               ; I hereby declare "nix geht mehr!"
        ocaml             ; an objective camel
        (org              ; organize your plain life in plain text
         +attach          ; custom attachment system
@@ -125,13 +127,13 @@
        ;; toward a specific purpose. They may have additional dependencies and
        ;; should be loaded late.
        :app
-       email             ; emacs as an email client
+      ;email             ; emacs as an email client
       ;irc               ; how neckbeards socialize
-      (rss +org)        ; emacs as an RSS reader
+      ;(rss +org)        ; emacs as an RSS reader
       ;twitter           ; twitter client https://twitter.com/vnought
-      (write            ; emacs as a word processor (latex + org + markdown)
-       +wordnut         ; wordnet (wn) search
-       +langtool)       ; a proofreader (grammar/style check) for Emacs
+      ;(write            ; emacs as a word processor (latex + org + markdown)
+      ; +wordnut         ; wordnet (wn) search
+      ; +langtool)       ; a proofreader (grammar/style check) for Emacs
 
        :collab
       ;floobits          ; peer programming for a price
@@ -143,44 +145,3 @@
        ;; and additional ex commands for evil-mode. Use it as a reference for
        ;; your own modules.
        (default +bindings +snippets +evil-commands))
-
-;; * UI
-(setq frame-title-format
-      '("emacs%@"
-        (:eval (system-name)) ": "
-        (:eval (if (buffer-file-name)
-                   (abbreviate-file-name (buffer-file-name))
-                 "%b")))
-      doom-font (font-spec :family "Input Mono Narrow" :size 16 :weight 'semi-light)
-      doom-variable-pitch-font (font-spec :family "Input Sans Narrow" :size 14 :weight 'normal)
-      doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 12 :weight 'normal)
-      doom-big-font (font-spec :family "Input Mono Narrow" :size 22 :weight 'semi-light)
-      ovp-font "Iosevka Term"
-      doom-theme 'doom-city-lights
-      doom-line-numbers-style nil
-      +doom-modeline-buffer-file-name-style 'truncate-upto-project
-      doom-neotree-enable-variable-pitch t
-      doom-neotree-project-size 1.2
-      doom-neotree-line-spacing 0
-      doom-neotree-folder-size 1.0
-      doom-neotree-chevron-size 0.6
-      scroll-conservatively 0
-      indicate-buffer-boundaries nil
-      frame-alpha-lower-limit 0
-      indicate-empty-lines nil
-      which-key-idle-delay 0.3)
-
-;; load heavy packages all sneaky breeky like
-(defun auto-require-packages (packages)
-  (let* ((reqs (cl-remove-if #'featurep packages))
-         (req (pop reqs)))
-    (when req
-      (require req)
-      (when reqs
-        (run-with-idle-timer 1 nil #'auto-require-packages reqs)))))
-
-(run-with-idle-timer 1 nil #'auto-require-packages
-                     '(calendar find-func format-spec org-macs org-compat
-                       org-faces org-entities org-list org-pcomplete org-src
-                       org-footnote org-macro ob org org-clock org-agenda
-                       org-capture with-editor git-commit package magit))
