@@ -1,29 +1,5 @@
 ;;; app/email/config.el -*- lexical-binding: t; -*-
 
-;; ** Prodigy
-(def-package! prodigy
-  :commands (prodigy
-             prodigy-find-service
-             prodigy-start-service)
-  :config
-  (prodigy-define-tag
-    :name 'email
-    :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
-  (prodigy-define-service
-    :name "imapnotify-fastmail"
-    :command "imapnotify"
-    :args (list "-c" (expand-file-name ".config/imap_notify/fastmail-config.js" (getenv "HOME")))
-    :tags '(email)
-    :kill-signal 'sigkill))
-
-(run-with-idle-timer
- 10
- nil
- (lambda!
-  (prodigy-start-service
-   (prodigy-find-service
-    "imapnotify-gmail"))))
-
 ;;;; Notmuch
 (def-package! notmuch
   :commands (notmuch
@@ -37,14 +13,19 @@
              notmuch-show-mode
              notmuch-message-mode)
   :config
-  (setq notmuch-fcc-dirs nil
+  (setq notmuch-fcc-dirs '((".*" . "tahirbutt/Sent"))
         notmuch-show-logo nil
         notmuch-message-headers-visible nil
         message-kill-buffer-on-exit t
         message-send-mail-function 'message-send-mail-with-sendmail
         notmuch-search-oldest-first nil
-        send-mail-function 'sendmail-send-it
-        sendmail-program "/usr/local/bin/msmtp"
+        ;; for sending from multiple accounts
+        ;; mail-specify-envelope-from t
+        ;; message-sendmail-envelope-from header
+        ;; mail-envelope-from header
+        sendmail-program "~/.local/bin/msmtp-enqueue.sh"
+        notmuch-wash-original-regexp "^\\(On .*, .* wrote:\\|From: .*<.*@.*>\\)$"
+        notmuch-wash-signature-regexp "^\\(-- ?\\|--\\|_+\\)$"
         notmuch-search-result-format '(("date" . "%12s ")
                                        ("count" . "%-7s ")
                                        ("authors" . "%-30s ")
@@ -54,26 +35,37 @@
                                      ("authors" . "%-20s")
                                      ((("tree" . "%s") ("subject" . "%s")) . "%-54s ")
                                      ("tags" . "%s"))
-        notmuch-tag-formats '(("unread"
-                               (propertize tag 'face 'notmuch-tag-unread)))
+        notmuch-tag-formats '(("unread" (propertize tag 'face 'notmuch-tag-unread)))
         notmuch-hello-sections '(notmuch-hello-insert-saved-searches
                                  notmuch-hello-insert-alltags)
-        notmuch-saved-searches '((:name "inbox"   :query "tag:inbox not tag:trash"                            :key "i")
-                                 (:name "flagged" :query "tag:flagged"                                        :key "f")
-                                 (:name "sent"    :query "tag:sent"                                           :key "s")
-                                 (:name "drafts"  :query "tag:draft"                                          :key "d"))
+        notmuch-saved-searches '((:name "inbox" :query "tag:inbox not tag:trash" :key "i")
+                                 (:name "flagged" :query "tag:flagged" :key "f")
+                                 (:name "sent" :query "tag:sent" :key "s")
+                                 (:name "drafts" :query "tag:draft" :key "d"))
         notmuch-archive-tags '("-inbox" "-unread"))
-  (set-evil-initial-state! 'notmuch-hello-mode 'normal)
-  (set-evil-initial-state! 'notmuch-show-mode 'normal)
-  (set-evil-initial-state! 'notmuch-search-mode 'normal)
-  (set-evil-initial-state! 'notmuch-tree-mode 'normal)
-  (set-evil-initial-state! 'notmuch-message-mode 'normal)
-  (add-hook 'notmuch-tree-mode-hook #'+mail/buffer-face-mode-notmuch)
-  (add-hook 'notmuch-search-hook #'+mail/buffer-face-mode-notmuch)
-  (add-hook 'notmuch-message-mode-hook 'variable-pitch-mode)
+  ;; ** hooks
+  (set-evil-initial-state! '(notmuch-hello-mode
+                             notmuch-show-mode
+                             notmuch-search-mode
+                             notmuch-tree-mode
+                             notmuch-message-mode) 'normal)
+  (add-hook! 'notmuch-tree-mode-hook #'(solaire-mode
+                                        hide-mode-line-mode
+                                        +mail/buffer-face-mode-notmuch-tree))
+  (add-hook! 'notmuch-search-hook #'(solaire-mode
+                                     +mail/buffer-face-mode-notmuch-search))
+  (add-hook! 'notmuch-show-mode-hook #'(solaire-mode
+                                        +mail/buffer-face-mode-notmuch-show))
+  (add-hook! 'notmuch-message-mode-hook #'(solaire-mode))
+  (add-hook! 'notmuch-hello-mode-hook (set-face-background 'fringe (face-background 'default)))
+  (add-hook! 'notmuch-tree-mode-hook
+    (setq-local line-spacing nil)
+    (solaire-mode 1))
   ;; (add-hook 'notmuch-message-mode-hook #'+mail/buffer-face-mode-notmuch)
-  (add-hook 'notmuch-message-mode-hook (lambda () (set (make-local-variable 'company-backends) '(notmuch-company (company-ispell :with company-yasnippet)))))
-  (add-hook 'notmuch-tree-mode-hook (lambda () (setq-local line-spacing nil)))
+  ;; (add-hook 'notmuch-message-mode-hook
+  ;;           (lambda ()
+  ;;             (set (make-local-variable 'company-backends)
+  ;;                  '(notmuch-company (company-ispell :with company-yasnippet)))))
   (remove-hook 'message-mode-hook #'turn-on-auto-fill)
   (remove-hook 'notmuch-message-mode-hook #'turn-on-auto-fill)
   (after! evil-snipe
@@ -81,15 +73,25 @@
     (push 'notmuch-hello-mode evil-snipe-disabled-modes)
     (push 'notmuch-search-mode evil-snipe-disabled-modes)
     (push 'notmuch-show-mode evil-snipe-disabled-modes))
+
+  (set-company-backend! 'notmuch-message-mode
+    '(notmuch-company (company-ispell :with company-yasnippet)))
+
+  (set-popup-rule! "^\\*notmuch-hello" :side 'left :size 30 :ttl 0)
+
+  ;; ** advices
   (advice-add #'notmuch-start-notmuch-sentinel :override #'+mail/notmuch-start-notmuch-sentinel)
   (advice-add #'notmuch-show :override #'+mail/notmuch-show-reuse-buffer)
+  ;; (advice-remove #'notmuch-show  #'+mail/notmuch-show-reuse-buffer)
   (advice-add #'notmuch-hello-insert-searches :override #'+mail/notmuch-hello-insert-searches)
   (advice-add #'notmuch-hello-insert-saved-searches :override #'+mail/notmuch-hello-insert-saved-searches)
   (advice-add #'notmuch-hello-insert-buttons :override #'+mail/notmuch-hello-insert-buttons)
+  (advice-add #'notmuch-mua-reply :around #'+mail/notmuch-overwrite-sender)
   ;; (set-popup-rule! "\\*notmuch-hello\\*" :size 20 :side 'left :quit t)
-  (push (lambda (buf) (string-match-p "^\\*notmuch" (buffer-name buf)))
+  (push (lambda (buf) (string-match-p "^\\*notmuch-[^h]" (buffer-name buf)))
         doom-real-buffer-functions)
 
+  ;; ** keybinds
   (map! (:after notmuch
           (:map notmuch-show-mode-map
             :nmv "o"     #'ace-link-notmuch-show
@@ -152,20 +154,35 @@
             :nmv "d"   #'+mail/notmuch-tree-delete
             :nmv "x"   #'+mail/notmuch-tree-spam)
           (:map notmuch-message-mode-map
+            :desc "Save as Draft"       "M-s" #'notmuch-draft-save
+            :desc "Resume Draft"        "M-r" #'notmuch-draft-resume
             :localleader
             :desc "Send and Exit"       :n doom-localleader-key #'notmuch-mua-send-and-exit
             :desc "Kill Message Buffer" :n "k" #'notmuch-mua-kill-buffer
-            :desc "Save as Draft"       :n "s" #'message-dont-send
-            :desc "Attach file"         :n "f" #'mml-attach-file)))
-  )
-;;;; counsel-notmuch
+            :desc "Save as Draft"       :n "s" #'notmuch-draft-postpone
+            :desc "Attach file"         :n "f" #'mml-attach-file))))
+
 (def-package! counsel-notmuch
+  :when (featurep! :completion ivy)
   :commands counsel-notmuch
   :after notmuch)
-;;;; org-mime
+
+(def-package! helm-notmuch
+  :when (featurep! :completion helm)
+  :commands helm-notmuch
+  :after notmuch)
+
 (def-package! org-mime
   :after (org notmuch)
   :config
   (setq
    org-mime-library 'mml
    org-mime-export-options '(:section-numbers nil :with-author nil :with-toc nil)))
+
+(def-package! vdirel 
+  :after notmuch
+  :config
+  (setq vdirel-repository (expand-file-name "~/.pim/contacts"))
+  (map!
+   (:map message-mode-map
+     :nmv "C-TAB" #'vdirel-helm-select-email)))

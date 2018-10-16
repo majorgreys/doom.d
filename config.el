@@ -3,10 +3,10 @@
 (setq-default
       user-mail-address "tahir@tahirbutt.com"
       user-full-name    "Tahir H. Butt"
-      doom-font (font-spec :family "Input Mono Narrow" :size 14 :weight 'ultralight)
-      doom-variable-pitch-font (font-spec :family "Input Sans Narrow" :size 14 :weight 'normal)
+      doom-font (font-spec :family "Input Mono Narrow" :size 16 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "Input Sans Narrow" :size 16 :weight 'normal)
       doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 12 :weight 'normal)
-      doom-big-font (font-spec :family "Input Mono Narrow" :size 22 :weight 'ultralight)
+      doom-big-font (font-spec :family "Input Mono Narrow" :size 22 :weight 'semi-light)
       ovp-font "Iosevka Term"
       doom-theme 'doom-city-lights)
 
@@ -65,7 +65,7 @@
 
   (setq org-capture-templates
         '(("t" "Todo" entry
-           (file+headline +org-default-todo-file "Inbox")
+           (file+headline "todo.org" "Inbox")
            "* TODO %?\n %i\n %a" :prepend t :kill-buffer t)
 
           ("j" "Journal" entry
@@ -73,21 +73,25 @@
            "* %?\nEntered on %U\n %i\n %a" :prepend t :kill-buffer t)
 
           ("n" "Notes" entry
-           (file+headline +org-default-notes-file "Inbox")
+           (file+headline "notes.org" "Inbox")
            "* %u %?\n %i" :prepend t :kill-buffer t)
 
-          ("ld" "Liwwa: Daily Scrum" entry
-           (file+olp+datetree "liwwa.org" "Journal")
-           "* Logged at %U :scrum:\nSince last scrum\n- %?\nNext:\n-" :prepend t :kill-buffer t)
-
-          ("ln" "Liwwa: Note" entry
-           (file+olp+datetree "liwwa.org" "Journal")
+          ("dn" "Dissertation: Journal" entry
+           (file+olp+datetree "dissertation.org" "Journal")
            "* %? :note:\n %i" :prepend t :kill-buffer t)
 
-          ("lt" "Liwwa: Todo" entry
-           (file+headline "liwwa.org" "Todo")
+          ("dt" "Dissertation: Todo" entry
+           (file+headline "dissertation.org" "Todo")
            "* TODO %?\n %i\n %a" :prepend t :kill-buffer t)
-          ))
+
+          ("ddn" "Datadog: Journal" entry
+           (file+olp+datetree "datadog.org" "Journal")
+           "* %? :note:\n %i" :prepend t :kill-buffer t)
+
+          ("ddt" "Datadog: Todo" entry
+           (file+headline "datadog.org" "Todo")
+           "* TODO %?\n %i\n %a" :prepend t :kill-buffer t)))
+
 
   (autoload 'magit--display-buffer-fullframe "magit-mode")
   (advice-remove #'org-capture-place-template #'+popup*suppress-delete-other-windows)
@@ -149,27 +153,34 @@
 
 (add-to-list 'auto-mode-alist '("\\.jinja$" . web-mode))
 
-(def-package! py-autopep8
+;; (def-package! auto-virtualenvwrapper
+;;   :config
+;;   (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate))
+
+(def-package! pipenv
   :config
-  (add-hook 'python-mode-hook #'py-autopep8-enable-on-save))
+  (add-hook 'python-mode-hook #'pipenv-mode))
+
+(def-package! py-autopep8
+  ;; :config
+  ;; (add-hook 'python-mode-hook #'py-autopep8-enable-on-save)
+  )
 
 (def-package! python
   :config
   (add-hook 'before-save-hook #'py-isort-before-save))
-
-(def-package! auto-virtualenvwrapper
-  :config
-  (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate))
 
 (after! ein
   (setq ein:jupyter-default-notebook-directory "~/"))
 
 (after! tramp-sh
   (setq tramp-default-method "ssh"
-        tramp-default-proxies-alist
-        '(("liwwa-vm" nil "/ssh:liwwa-vm:"))
-        tramp-debug-buffer t
-        tramp-verbose 10))
+        tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"
+        ;; tramp-debug-buffer t
+        ;; tramp-verbose 10
+        )
+  (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
+
 
 (provide 'config)
 ;;; config.el ends here
