@@ -6,7 +6,6 @@
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        (lookup           ; helps you navigate your code and documentation
-        +devdocs         ; ...on devdocs.io online
         +docsets)        ; ...or in Dash docsets locally
        snippets          ; my elves. They type so I don't have to
        spellcheck        ; tasing you for misspelling mispelling
@@ -18,35 +17,48 @@
        (company          ; the ultimate code completion backend
         +auto)           ; as-you-type code completion
        (helm             ; the *other* search engine for love and life
-        +fuzzy)          ; enable fuzzy search backend for helm
-      ;ido               ; the other *other* search engine...
-       (ivy              ; a search engine for love and life
-        +fuzzy)          ; enable fuzzy search backend for ivy
+       +fuzzy)          ; enable fuzzy search backend for helm
+       ;;ido               ; the other *other* search engine...
+       ;; (ivy              ; a search engine for love and life
+       ;;  +fuzzy)          ; enable fuzzy search backend for ivy
+       (lsp
+        +javascript
+        ;;+go
+        ;;+css
+        +rust
+        ;;+cpp
+        ;;+ocaml
+        ;;+java
+        +python
+        +sh)
 
        :ui
+       ;;deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-modeline     ; a snazzy Atom-inspired mode-line
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
        evil-goggles      ; display visual hints when editing in evil
-       fci               ; a `fill-column' indicator
+      ;fci               ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE tags
+       ;;modeline          ; snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink the current line after jumping
        ;neotree           ; a project drawer, like NERDTree for vim
        treemacs          ; a project drawer, like neotree but cooler
        (popup            ; tame sudden yet inevitable temporary windows
         +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
-      ;pretty-code       ; replace bits of code with pretty symbols
-      ;tabbar            ; FIXME an (incomplete) tab bar for Emacs
-       unicode           ; extended unicode support for various languages
+       ;;pretty-code       ; replace bits of code with pretty symbols
+       ;;tabbar            ; FIXME an (incomplete) tab bar for Emacs
+       ;;unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
 
        :editor
-       format
-      ;parinfer          ; turn lisp into python, sort of
+       ;;(format +onsave)  ; automated prettiness
+       multiple-cursors  ; editing in many places at once
+       ;;parinfer          ; turn lisp into python, sort of
        rotate-text       ; cycle region at point between text candidates
 
        :emacs
@@ -60,23 +72,26 @@
        vc                ; version-control and Emacs, sitting in a tree
 
        :tools
+       ;;ansible
+       docker
        editorconfig      ; let someone else argue about tabs vs spaces
-       ein               ; tame Jupyter notebooks with emacs
-      ;gist              ; interacting with github gists
-      ;macos             ; MacOS-specific commands
-      ;make              ; run make tasks from Emacs
-       magit             ;
-      ;password-store    ; password manager for nerds
-       pdf               ; pdf enhancements
-      ;prodigy           ; FIXME managing external services & code builders
-       rgb               ; creating color strings
-      ;tmux              ; an API for interacting with tmux
-      ;upload            ; map local to remote projects via ssh/ftp
-      ;wakatime
+       ;;ein               ; tame Jupyter notebooks with emacs
+       ;;gist              ; interacting with github gists
+       ;;macos             ; MacOS-specific commands
+       ;;make              ; run make tasks from Emacs
+       magit             ; a git porcelain for Emacs
+       ;;password-store    ; password manager for nerds
+       ;; pdf               ; pdf enhancements
+       ;;prodigy           ; FIXME managing external services & code builders
+       ;;rgb               ; creating color strings
+       ;;terraform         ; infrastructure as code
+       ;;tmux              ; an API for interacting with tmux
+       ;;upload            ; map local to remote projects via ssh/ftp
+       ;;wakatime
 
        :lang
       ;assembly          ; assembly for fun or debugging
-      (cc +irony +rtags); C/C++/Obj-C madness
+      ;(cc +irony +rtags); C/C++/Obj-C madness
       ;clojure           ; java with a lisp
       ;common-lisp       ; if you've seen one lisp, you've seen them all
       ;crystal           ; ruby at the speed of c
@@ -98,8 +113,8 @@
       ;lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
       ;nim               ; python + lisp at the speed of c
-      nix               ; I hereby declare "nix geht mehr!"
-       ocaml             ; an objective camel
+      ;nix               ; I hereby declare "nix geht mehr!"
+      ;ocaml             ; an objective camel
        (org              ; organize your plain life in plain text
         +attach          ; custom attachment system
         +babel           ; running code in org
@@ -110,7 +125,9 @@
       ;php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
       ;purescript        ; javascript, but functional
-       python            ; beautiful is better than ugly
+      (python            ; beautiful is better than ugly
+       +pyenv
+       +pyvenv)
       ;qt                ; the 'cutest' gui framework ever
       ;racket            ; a DSL for DSLs
       ;rest              ; Emacs as a REST client
@@ -128,7 +145,7 @@
        :app
        email             ; emacs as an email client
       ;irc               ; how neckbeards socialize
-       (rss +org)        ; emacs as an RSS reader
+      ;(rss +org)        ; emacs as an RSS reader
       ;twitter           ; twitter client https://twitter.com/vnought
        (write            ; emacs as a word processor (latex + org + markdown)
         +wordnut         ; wordnet (wn) search
