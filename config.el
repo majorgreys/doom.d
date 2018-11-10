@@ -3,10 +3,10 @@
 (setq-default
       user-mail-address "tahir@tahirbutt.com"
       user-full-name    "Tahir H. Butt"
-      doom-font (font-spec :family "Input Mono Narrow" :size 16 :weight 'semi-light)
-      doom-variable-pitch-font (font-spec :family "Input Sans Narrow" :size 16 :weight 'normal)
+      doom-font (font-spec :family "Input Mono Narrow" :size 14 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "Input Sans Narrow" :size 14 :weight 'normal)
       doom-unicode-font (font-spec :family "Sarasa Mono SC" :size 12 :weight 'normal)
-      doom-big-font (font-spec :family "Input Mono Narrow" :size 22 :weight 'semi-light)
+      doom-big-font (font-spec :family "Input Mono Narrow" :size 18 :weight 'semi-light)
       ovp-font "Iosevka Term"
       doom-theme 'doom-city-lights)
 
@@ -15,6 +15,15 @@
 
 (add-to-list 'default-frame-alist
              '(ns-appearance . dark))
+
+(after! company
+  (setq company-idle-delay 0.1
+        company-minimum-prefix-length 2
+        company-quickhelp-mode t
+        company-quickhelp-delay 0.4
+        company-backends '((company-yasnippet
+                            company-keywords
+                            company-capf))))
 
 ;; lang/org
 (setq org-directory (expand-file-name "~/Dropbox/org/")

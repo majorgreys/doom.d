@@ -3,15 +3,14 @@
 (def-package! lsp-mode
   :commands (lsp-mode lsp-define-stdio-client))
 
-(def-package! lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
-  :config
-  (set-lookup-handlers! 'lsp-ui-mode
-                        :definition #'lsp-ui-peek-find-definitions
-                        :references #'lsp-ui-peek-find-references)
-  (setq lsp-ui-doc-max-height 8
-        lsp-ui-doc-max-width 35
-        lsp-ui-sideline-ignore-duplicate t))
+;; (def-package! lsp-ui
+;;   :hook
+;;   (lsp-mode . lsp-ui-mode)
+;;   (lsp-ui-mode . flycheck-mode)
+;;   :config
+;;   (setq lsp-ui-sideline-ignore-duplicate t
+;;         lsp-ui-flycheck-enable t
+;;         lsp-ui-sideline-enable))
 
 (def-package! lsp-typescript
   :when (featurep! +javascript)

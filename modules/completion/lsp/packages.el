@@ -17,6 +17,7 @@
     (package! lsp-go))
 
   (when (featurep! +python)
+    (package! company-anaconda :disable t)
     (package! anaconda-mode :disable t))
 
   (when (featurep! +rust)
