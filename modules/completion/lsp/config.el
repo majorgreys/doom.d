@@ -18,9 +18,13 @@
 
 (def-package! company-lsp
   :after lsp-mode
+  :init
+  (setq company-transformers nil
+        company-lsp-async t
+        company-lsp-cache-candidates nil)
   :config
   (set-company-backend! 'lsp-mode 'company-lsp)
-  (setq company-lsp-enable-recompletion t))
+  (setq company-lsp-enable-recompletion nil))
 
 (def-package! lsp-go
   :when (featurep! +go)
