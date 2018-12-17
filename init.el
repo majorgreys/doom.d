@@ -21,16 +21,16 @@
        ;;ido               ; the other *other* search engine...
        (ivy              ; a search engine for love and life
         +fuzzy)          ; enable fuzzy search backend for ivy
-       (lsp
-        +javascript
+       ; (lsp
+       ; +javascript
         ;;+go
         ;;+css
-        +rust
+       ; +rust
         ;;+cpp
         ;;+ocaml
         ;;+java
-        +python
-        +sh)
+       ; +python
+       ; +sh)
 
        :ui
        ;;deft              ; notational velocity for Emacs
