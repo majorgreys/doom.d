@@ -8,7 +8,14 @@
       doom-unicode-font (font-spec :family "Iosevka")
       doom-big-font (font-spec :family "Iosevka" :size 28)
       doom-variable-pitch-font (font-spec :family "Input Sans Condensed")
-      doom-theme (if (display-graphic-p) 'doom-Iosvkem nil))
+      doom-theme (if (display-graphic-p) 'doom-Iosvkem nil)
+      +doom-dashboard-banner-padding '(0 . 0)
+      +doom-dashboard-banner-file "emacs.png"
+      +doom-dashboard-banner-dir "~/.doom.d/assets/"
+      +doom-dashboard-functions
+      '(doom-dashboard-widget-banner
+        doom-dashboard-widget-shortmenu
+        doom-dashboard-widget-footer))
 
 (add-to-list 'default-frame-alist
              '(ns-transparent-titlebar . t))
