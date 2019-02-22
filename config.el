@@ -34,7 +34,7 @@
            "* TODO %?\n %i\n %a" :prepend t :kill-buffer t)
 
           ("j" "Journal" entry
-           (file+olp+datetree "journal.org" "Inbox")
+           (file+olp+datetree "journal.org" "Journal")
            "* %?\nEntered on %U\n %i\n %a" :prepend t :kill-buffer t)
 
           ("n" "Notes" entry
@@ -48,6 +48,16 @@
         ;; tramp-verbose 10
         )
   (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
+
+(def-package! lsp-python-ms
+  :init (add-hook 'python-mode-hook #'+lsp|init)
+  :config
+  ;; for dev build of language server
+  (setq lsp-python-ms-dir
+        (expand-file-name "~/src/python-language-server/output/bin/Release/"))
+  ;; for executable of language server, if it's not symlinked on your PATH
+  (setq lsp-python-ms-executable
+        "~/src/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
 
 (provide 'config)
 ;;; config.el ends here
