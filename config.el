@@ -10,18 +10,20 @@
       doom-variable-pitch-font (font-spec :family "Input Sans Condensed")
       doom-theme (if (display-graphic-p) 'doom-city-lights nil)
       +doom-dashboard-banner-padding '(0 . 0)
-      +doom-dashboard-banner-file "emacs.png"
+      +doom-dashboard-banner-file "vim.png"
       +doom-dashboard-banner-dir "~/.doom.d/assets/"
       +doom-dashboard-functions
       '(doom-dashboard-widget-banner
         doom-dashboard-widget-shortmenu
         doom-dashboard-widget-footer))
 
-(add-to-list 'default-frame-alist
-             '(ns-transparent-titlebar . t))
-
-(add-to-list 'default-frame-alist
-             '(ns-appearance . dark))
+(when IS-MAC
+   (setq ns-use-thin-smoothing t)    ; thinner strokes for font-smoothing
+   (setq dired-use-ls-dired nil)
+   ;; macOS natural title bars
+   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+   (add-to-list 'default-frame-alist '(ns-appearance . dark))
+   (add-hook 'window-setup-hook #'toggle-frame-fullscreen))
 
 (after! org
   (setq org-directory (expand-file-name "~/Dropbox/org/")
@@ -48,16 +50,6 @@
         ;; tramp-verbose 10
         )
   (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
-
-(def-package! lsp-python-ms
-  :init (add-hook 'python-mode-hook #'+lsp|init)
-  :config
-  ;; for dev build of language server
-  (setq lsp-python-ms-dir
-        (expand-file-name "~/src/python-language-server/output/bin/Release/"))
-  ;; for executable of language server, if it's not symlinked on your PATH
-  (setq lsp-python-ms-executable
-        "~/src/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
 
 (provide 'config)
 ;;; config.el ends here
