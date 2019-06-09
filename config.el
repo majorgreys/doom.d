@@ -30,6 +30,12 @@
         org-agenda-files (list org-directory)
         org-ellipsis " ▼ ")
 
+  (map! :map org-mode-map
+        :localleader
+        (:prefix ("p" . "Push/Pull")
+          :desc "pull"  "l" (lambda! (org-trello-sync-buffer t))
+          :desc "push"  "p" #'org-trello-sync-buffer))
+
   (setq org-capture-templates
         '(("t" "Todo" entry
            (file+headline "todo.org" "Inbox")
@@ -42,6 +48,14 @@
           ("n" "Notes" entry
            (file+headline "notes.org" "Inbox")
            "* %u %?\n %i" :prepend t :kill-buffer t))))
+
+(def-package! lsp-python-ms
+  :after lsp
+  :config
+  (setq lsp-python-ms-dir
+        (expand-file-name "~/src/python-language-server/output/bin/Release/"))
+  (setq lsp-python-ms-executable
+        "~/src/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
 
 (after! tramp-sh
   (setq tramp-default-method "ssh"
