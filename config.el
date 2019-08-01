@@ -4,8 +4,8 @@
       user-mail-address "tahir@tahirbutt.com"
       user-full-name    "Tahir H. Butt"
       doom-font (font-spec :family "Iosevka Term SS08" :size 14)
-      doom-serif-font (font-spec :family "Iosevka Slab" :size 14)
-      doom-unicode-font (font-spec :family "Iosevka Slab")
+      doom-serif-font (font-spec :family "Iosevka Term Slab" :size 14)
+      doom-unicode-font (font-spec :family "Iosevka Term Slab")
       doom-big-font (font-spec :family "Iosevka Term SS08" :size 28)
       doom-variable-pitch-font (font-spec :family "Input Sans Condensed")
       doom-theme (if (display-graphic-p) 'doom-city-lights nil)
