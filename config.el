@@ -1,5 +1,7 @@
 ;;; config.el --- description -*- lexical-binding: t; -*-
 
+(fset 'battery-update #'ignore)
+
 (setq-default
       user-mail-address "tahir@tahirbutt.com"
       user-full-name    "Tahir H. Butt"
@@ -28,42 +30,6 @@
 (after! org
   (setq org-directory (expand-file-name "~/Dropbox/org/")
         org-agenda-files (list org-directory)
-        org-ellipsis " ▼ ")
-
-  (map! :map org-mode-map
-        :localleader
-        (:prefix ("p" . "Push/Pull")
-          :desc "pull"  "l" (lambda! (org-trello-sync-buffer t))
-          :desc "push"  "p" #'org-trello-sync-buffer))
-
-  (setq org-capture-templates
-        '(("t" "Todo" entry
-           (file+headline "todo.org" "Inbox")
-           "* TODO %?\n %i\n %a" :prepend t :kill-buffer t)
-
-          ("j" "Journal" entry
-           (file+olp+datetree "journal.org" "Journal")
-           "* %?\nEntered on %U\n %i\n %a" :prepend t :kill-buffer t)
-
-          ("n" "Notes" entry
-           (file+headline "notes.org" "Inbox")
-           "* %u %?\n %i" :prepend t :kill-buffer t))))
-
-(def-package! lsp-python-ms
-  :after lsp
-  :config
-  (setq lsp-python-ms-dir
-        (expand-file-name "~/src/python-language-server/output/bin/Release/"))
-  (setq lsp-python-ms-executable
-        "~/src/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
-
-(after! tramp-sh
-  (setq tramp-default-method "ssh"
-        tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"
-        ;; tramp-debug-buffer t
-        ;; tramp-verbose 10
-        )
-  (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
+        org-ellipsis " ▼ "))
 
 (provide 'config)
-;;; config.el ends here
