@@ -27,9 +27,22 @@
    (add-to-list 'default-frame-alist '(ns-appearance . dark))
    (add-hook 'window-setup-hook #'toggle-frame-fullscreen))
 
+(after! notmuch
+  (setq +notmuch-sync-backend `mbsync)
+  (setq +notmuch-mail-folder "~/.mail/tahirbutt")
+  (setq sendmail-program "~/.local/bin/msmtp-enqueue.sh"))
+
 (after! org
   (setq org-directory (expand-file-name "~/Dropbox/org/")
         org-agenda-files (list org-directory)
         org-ellipsis " ▼ "))
+
+(after! tramp-sh
+  (setq tramp-default-method "ssh"
+        tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"
+        ;; tramp-debug-buffer t
+        ;; tramp-verbose 10
+        )
+  (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
 
 (provide 'config)
