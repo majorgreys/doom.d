@@ -10,7 +10,7 @@
       doom-unicode-font (font-spec :family "Iosevka Term Slab")
       doom-big-font (font-spec :family "Iosevka Term SS08" :size 28)
       doom-variable-pitch-font (font-spec :family "Input Sans Condensed")
-      doom-theme 'doom-nord
+      doom-theme 'doom-spacegrey
       +doom-dashboard-banner-padding '(0 . 0)
       +doom-dashboard-banner-file "vim.png"
       +doom-dashboard-banner-dir "~/.doom.d/assets/"
@@ -32,9 +32,11 @@
   (setq +notmuch-mail-folder "~/.mail/tahirbutt")
   (setq sendmail-program "~/.local/bin/msmtp-enqueue.sh"))
 
+
+;; org-mode
+(setq org-directory (expand-file-name "~/Dropbox/org/"))
 (after! org
-  (setq org-directory (expand-file-name "~/Dropbox/org/")
-        org-agenda-files (list org-directory)
+  (setq org-agenda-files (list org-directory)
         org-ellipsis " ▼ "))
 
 (after! tramp-sh
