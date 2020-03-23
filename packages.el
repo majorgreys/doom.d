@@ -2,3 +2,5 @@
 ;;; ~/.doom.d/packages.el
 
 (package! ox-slack)
+(package! bazel-mode)
+(package! org-chef)
