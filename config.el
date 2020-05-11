@@ -33,6 +33,8 @@
   (setq sendmail-program "~/.local/bin/msmtp-enqueue.sh"))
 
 
+(setq python-shell-interpreter "python3")
+
 ;; org-mode
 (setq org-directory (expand-file-name "~/Dropbox/org/"))
 
@@ -60,7 +62,7 @@
             "* %U %?\n %i\n %a"
             :prepend t))))
 
-(def-package! org-chef
+(use-package! org-chef
   :after-call (org-mode)
   :commands org-chef-get-recipe-from-url
   :config
