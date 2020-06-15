@@ -1,17 +1,17 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; This file controls what Doom modules are enabled and what order they load in.
-;; Remember to run 'doom sync' after modifying it!
+;; This file controls what Doom modules are enabled and what order they load
+;; in. Remember to run 'doom sync' after modifying it!
 
 ;; NOTE Press 'SPC h d h' (or 'C-h d h' for non-vim users) to access Doom's
-;;      documentation. There you'll find information about all of Doom's modules
-;;      and what flags they support.
+;;      documentation. There you'll find a "Module Index" link where you'll find
+;;      a comprehensive list of Doom's modules and what flags they support.
 
 ;; NOTE Move your cursor over a module's name (or its flags) and press 'K' (or
-;;      'C-c g k' for non-vim users) to view its documentation. This works on
+;;      'C-c c k' for non-vim users) to view its documentation. This works on
 ;;      flags as well (those symbols that start with a plus).
 ;;
-;;      Alternatively, press 'gd' (or 'C-c g d') on a module to browse its
+;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
 (doom! :input
@@ -33,6 +33,7 @@
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
        ;;indent-guides     ; highlighted indent columns
+       ;;minimap           ; show a map of the code on the side
        modeline          ; snazzy, Atom-inspired modeline, plus API
        ;;nav-flash         ; blink cursor line after big motions
        ;;neotree           ; a project drawer, like NERDTree for vim
@@ -52,7 +53,7 @@
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
-       (format +onsave)  ; automated prettiness
+       format              ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        ;;lispy             ; vim for lisp, for people who don't like vim
        ;;multiple-cursors  ; editing in many places at once
@@ -84,8 +85,8 @@
        ;;ansible
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
-       ;;docker
-       ;;editorconfig      ; let someone else argue about tabs vs spaces
+       docker
+       editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
@@ -98,6 +99,7 @@
        pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        ;;rgb               ; creating color strings
+       ;;taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
@@ -120,6 +122,7 @@
        ;;faust             ; dsp, but you get to keep your soul
        ;;fsharp           ; ML stands for Microsoft's Language
        ;;fstar             ; (dependent) types and (monadic) effects and Z3
+       ;;gdscript          ; the language you waited for
        (go +lsp)         ; the hipster dialect
        ;;(haskell +dante)  ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
@@ -152,10 +155,11 @@
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
        (python             ; beautiful is better than ugly
-	+lsp
-	+cython)
+        +lsp
+        +cython)
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
+       ;;raku              ; the artist formerly known as perl6
        ;;rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
