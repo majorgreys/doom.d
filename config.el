@@ -73,6 +73,18 @@
           "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n  :servings:\n  :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Ingredients\n   %?\n** Directions\n\n")
         org-capture-templates))
 
+(use-package! org-noter
+  :defer t
+  :after org-mode
+  :config
+  (map! :map (pdf-view-mode-map nov-mode-map)
+     :n "i" #'org-noter-insert-note
+     :n "K" #'org-noter-kill-session)
+  :config
+  (setq org-noter-auto-save-last-location t
+        org-noter-always-create-frame nil
+        org-noter-insert-note-no-questions t))
+
 (after! tramp-sh
   (setq tramp-default-method "ssh"
         tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"
@@ -80,5 +92,14 @@
         ;; tramp-verbose 10
         )
   (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
+
+(after! circe
+  (set-irc-server! "chat.freenode.net"
+    `(:tls t
+      :port 6697
+      :nick "majorgreys"
+      :sasl-username ,(+pass-get-user "irc/freenode.net")
+      :sasl-password (lambda (&rest _) (+pass-get-secret "irc/freenode.net"))
+      :channels ("#emacs"))))
 
 (provide 'config)

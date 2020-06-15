@@ -4,3 +4,6 @@
 (package! ox-slack)
 (package! bazel-mode)
 (package! org-chef)
+(package! modus-operandi-theme)
+(package! nov
+  :recipe (:type git :repo "https://depp.brause.cc/nov.el.git"))
