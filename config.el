@@ -63,8 +63,8 @@
             :prepend t))))
 
 (use-package! org-chef
-  :after-call (org-mode)
-  :commands org-chef-get-recipe-from-url
+  :after org-mode
+  :commands (org-chef-insert-recipe org-chef-get-recipe-from-url)
   :config
   (push '("c" "Cookbook" entry (file "cookbook.org")
           "%(org-chef-get-recipe-from-url)" :empty-lines 1)
