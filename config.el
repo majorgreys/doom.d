@@ -10,7 +10,7 @@
       doom-unicode-font (font-spec :family "Iosevka Slab")
       doom-big-font (font-spec :family "Iosevka SS08" :size 28)
       doom-variable-pitch-font (font-spec :family "Input Sans Condensed")
-      doom-theme 'doom-spacegrey
+      doom-theme 'modus-operandi
       +doom-dashboard-banner-padding '(0 . 0)
       +doom-dashboard-banner-file "vim.png"
       +doom-dashboard-banner-dir "~/.doom.d/assets/"
