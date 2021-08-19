@@ -10,9 +10,9 @@
       doom-unicode-font (font-spec :family "Iosevka Slab")
       doom-big-font (font-spec :family "Iosevka SS08" :size 28)
       doom-variable-pitch-font (font-spec :family "Input Sans Condensed")
-      doom-theme 'modus-operandi
+      doom-theme 'modus-vivendi
       +doom-dashboard-banner-padding '(0 . 0)
-      +doom-dashboard-banner-file "vim.png"
+      +doom-dashboard-banner-file "gnu-head.png"
       +doom-dashboard-banner-dir "~/.doom.d/assets/"
       +doom-dashboard-functions
       '(doom-dashboard-widget-banner
@@ -32,11 +32,19 @@
   (setq +notmuch-mail-folder "~/.mail/tahirbutt")
   (setq sendmail-program "~/.local/bin/msmtp-enqueue.sh"))
 
+(map! :localleader
+  (:map org-tree-slide-mode-map
+    "e" #'org-tree-slide-slide-in-effect-toggle
+    "p" #'org-tree-slide-move-previous-tree
+    "n" #'org-tree-slide-move-next-tree
+    "c" #'org-tree-slide-content
+    "q" #'org-tree-slide-mode))
 
 (setq python-shell-interpreter "python3")
 
 ;; org-mode
 (setq org-directory (expand-file-name "~/Dropbox/org/"))
+(setq +org-capture-cookbook (expand-file-name "~/Dropbox/org/cookbook.org"))
 
 (after! org
   (setq org-agenda-files (list org-directory)
@@ -49,9 +57,12 @@
             (file+headline +org-capture-notes-file "Inbox")
             "* %u %?\n%i\n%a" :prepend t)
             ("j" "Journal" entry
-            (file+olp+datetree +org-capture-journal-file)
-            "* %U %?\n%i\n%a" :prepend t)
-
+             (file+olp+datetree +org-capture-journal-file)
+             "* %U %?\n%i\n%a" :prepend t)
+            ("c" "Cookbook" entry (file (expand-file-name "~/Dropbox/org/cookbook.org"))
+             "%(org-chef-get-recipe-from-url)" :empty-lines 1)
+            ("m" "Manual Cookbook" entry (file (expand-file-name "~/Dropbox/org/cookbook.org"))
+             "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n  :servings:\n  :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Ingredients\n   %?\n** Directions\n\n")
             ("d" "Centralized templates for Datadog")
             ("dt" "Datadog todo" entry
             (file+headline "datadog.org" "Tasks")
@@ -61,17 +72,6 @@
             (file+headline "datadog.org" "Notes")
             "* %U %?\n %i\n %a"
             :prepend t))))
-
-(use-package! org-chef
-  :after org-mode
-  :commands (org-chef-insert-recipe org-chef-get-recipe-from-url)
-  :config
-  (push '("c" "Cookbook" entry (file "cookbook.org")
-          "%(org-chef-get-recipe-from-url)" :empty-lines 1)
-        org-capture-templates)
-  (push '("m" "Manual Cookbook" entry (file "cookbook.org")
-          "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n  :servings:\n  :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Ingredients\n   %?\n** Directions\n\n")
-        org-capture-templates))
 
 (use-package! org-noter
   :defer t
