@@ -5,12 +5,12 @@
 (setq-default
       user-mail-address "tahir@tahirbutt.com"
       user-full-name    "Tahir H. Butt"
+      doom-theme 'modus-vivendi
       doom-font (font-spec :family "Iosevka SS08" :size 14)
       doom-serif-font (font-spec :family "Iosevka Slab" :size 14)
       doom-unicode-font (font-spec :family "Iosevka Slab")
       doom-big-font (font-spec :family "Iosevka SS08" :size 28)
       doom-variable-pitch-font (font-spec :family "Input Sans Condensed")
-      doom-theme 'modus-vivendi
       +doom-dashboard-banner-padding '(0 . 0)
       +doom-dashboard-banner-file "gnu-head.png"
       +doom-dashboard-banner-dir "~/.doom.d/assets/"
@@ -19,10 +19,6 @@
         doom-dashboard-widget-shortmenu
         doom-dashboard-widget-loaded
         doom-dashboard-widget-footer))
-
-(if (display-graphic-p)
-      (setq doom-theme 'modus-operandi)
-      (setq doom-theme 'doom-spacegrey))
 
 (when IS-MAC
    (setq ns-use-thin-smoothing t)    ; thinner strokes for font-smoothing
