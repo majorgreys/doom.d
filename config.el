@@ -9,7 +9,7 @@
       doom-font (font-spec :family "Iosevka SS08" :size 14)
       doom-serif-font (font-spec :family "Iosevka Slab" :size 14)
       doom-unicode-font (font-spec :family "Iosevka Slab")
-      doom-big-font (font-spec :family "Iosevka SS08" :size 28)
+      doom-big-font (font-spec :family "Iosevka SS08" :size 20)
       doom-variable-pitch-font (font-spec :family "Input Sans Condensed")
       +doom-dashboard-banner-padding '(0 . 0)
       +doom-dashboard-banner-file "gnu-head.png"
@@ -44,8 +44,8 @@
 (setq python-shell-interpreter "python3")
 
 ;; org-mode
-(setq org-directory (expand-file-name "~/Dropbox/org/"))
-(setq +org-capture-cookbook (expand-file-name "~/Dropbox/org/cookbook.org"))
+(setq org-directory (expand-file-name "~/org/"))
+(setq +org-capture-cookbook (expand-file-name "~/org/cookbook.org"))
 
 (after! org
   (setq org-agenda-files (list org-directory)
@@ -60,9 +60,9 @@
             ("j" "Journal" entry
              (file+olp+datetree +org-capture-journal-file)
              "* %U %?\n%i\n%a" :prepend t)
-            ("c" "Cookbook" entry (file (expand-file-name "~/Dropbox/org/cookbook.org"))
+            ("c" "Cookbook" entry (file (expand-file-name "~/org/cookbook.org"))
              "%(org-chef-get-recipe-from-url)" :empty-lines 1)
-            ("m" "Manual Cookbook" entry (file (expand-file-name "~/Dropbox/org/cookbook.org"))
+            ("m" "Manual Cookbook" entry (file (expand-file-name "~/org/cookbook.org"))
              "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n  :servings:\n  :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Ingredients\n   %?\n** Directions\n\n")
             ("d" "Centralized templates for Datadog")
             ("dt" "Datadog todo" entry
@@ -95,12 +95,12 @@
   (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
 
 (after! circe
-  (set-irc-server! "chat.freenode.net"
+  (set-irc-server! "irc.libera.net"
     `(:tls t
       :port 6697
       :nick "majorgreys"
-      :sasl-username ,(+pass-get-user "irc/freenode.net")
-      :sasl-password (lambda (&rest _) (+pass-get-secret "irc/freenode.net"))
+      :sasl-username ,(+pass-get-user "irc/libera.net")
+      :sasl-password (lambda (&rest _) (+pass-get-secret "irc/libera.net"))
       :channels ("#emacs"))))
 
 (provide 'config)
