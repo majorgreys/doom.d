@@ -31,7 +31,7 @@
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       ;;(emoji +unicode)  ; 🙂
+       (emoji +unicode)  ; 🙂
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
        ;;indent-guides     ; highlighted indent columns
@@ -88,7 +88,7 @@
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        direnv
        docker
-       editorconfig      ; let someone else argue about tabs vs spaces
+       ;;editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
@@ -154,7 +154,9 @@
        ;;purescript        ; javascript, but functional
        (python             ; beautiful is better than ugly
         +lsp
-        +cython)
+        +cython
+        +pyenv
+        +pyright)
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
@@ -181,7 +183,7 @@
        ;;calendar
        ;;emms
        ;;everywhere        ; *leave* Emacs!? You must be joking
-       irc               ; how neckbeards socialize
+       ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
 
