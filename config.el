@@ -135,4 +135,12 @@
     (push dir lsp-file-watch-ignored-directories))
   )
 
+(after! lsp-ui
+  (setq lsp-ui-doc-enable nil
+        lsp-lens-enable nil
+        lsp-ui-sideline-enable nil
+        lsp-ui-doc-include-signature t
+        lsp-ui-doc-max-height 15
+        lsp-ui-doc-max-width 100))
+
 (provide 'config)
