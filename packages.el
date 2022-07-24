@@ -3,3 +3,4 @@
 
 (package! modus-themes)
 (package! bazel)
+(package! denote)

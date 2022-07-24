@@ -132,8 +132,7 @@
                  "[/\\\\]third-party\\'"
                  "[/\\\\]buildtools\\'"
                  "[/\\\\]out\\'"))
-    (push dir lsp-file-watch-ignored-directories))
-  )
+    (push dir lsp-file-watch-ignored-directories)))
 
 (after! lsp-ui
   (setq lsp-ui-doc-enable nil
@@ -142,5 +141,16 @@
         lsp-ui-doc-include-signature t
         lsp-ui-doc-max-height 15
         lsp-ui-doc-max-width 100))
+
+
+(use-package! denote
+  :config
+  (setq denote-directory (expand-file-name "~/notes/")
+        denote-known-keywords '("personal" "work")
+        denote-infer-keywords t
+        denote-sort-keywords t
+        denote-file-type nil
+        denote-prompts '(title keywords)
+        denote-allow-multi-word-keywords t))
 
 (provide 'config)
