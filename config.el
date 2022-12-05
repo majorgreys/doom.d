@@ -25,8 +25,7 @@
   (setq dired-use-ls-dired nil)
   ;; macOS natural title bars
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark))
-  (add-hook 'window-setup-hook #'toggle-frame-fullscreen))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark)))
 
 (after! notmuch
   (setq +notmuch-sync-backend `mbsync)
@@ -49,30 +48,17 @@
 
 (after! org
   (setq org-agenda-files (list org-directory)
-        org-ellipsis " ▼ ")
+        org-ellipsis " ▼ "
+        denote-org-capture-specifiers "%l\n%i\n%?")
   (setq org-capture-templates
-        '(("t" "Personal todo" entry
-           (file+headline +org-capture-todo-file "Inbox")
-           "* TODO %?\n%i\n%a" :prepend t)
-          ("n" "Personal notes" entry
-           (file+headline +org-capture-notes-file "Inbox")
-           "* %u %?\n%i\n%a" :prepend t)
-          ("j" "Journal" entry
-           (file+olp+datetree +org-capture-journal-file)
-           "* %U %?\n%i\n%a" :prepend t)
-          ("c" "Cookbook" entry (file (expand-file-name "~/org/cookbook.org"))
-           "%(org-chef-get-recipe-from-url)" :empty-lines 1)
-          ("m" "Manual Cookbook" entry (file (expand-file-name "~/org/cookbook.org"))
-           "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n  :servings:\n  :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Ingredients\n   %?\n** Directions\n\n")
-          ("d" "Centralized templates for Datadog")
-          ("dt" "Datadog todo" entry
-           (file+headline "datadog.org" "Tasks")
-           "* TODO %?\n %i\n %a"
-           :prepend nil)
-          ("dn" "Datadog note" entry
-           (file+headline "datadog.org" "Notes")
-           "* %U %?\n %i\n %a"
-           :prepend t))))
+        '(
+          ("n" "Note" plain
+           (file denote-last-path)
+           #'denote-org-capture
+           :no-save t
+           :immediate-finish nil
+           :kill-buffer t
+           :jump-to-captured t))))
 
 (use-package! org-noter
   :defer t
@@ -89,8 +75,8 @@
 (after! tramp-sh
   (setq tramp-default-method "ssh"
         tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"
-        ;; tramp-debug-buffer t
-        ;; tramp-verbose 10
+        tramp-debug-buffer t
+        tramp-verbose 10
         )
   (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
 
