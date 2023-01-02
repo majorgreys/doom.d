@@ -10,7 +10,7 @@
  doom-serif-font (font-spec :family "Iosevka Slab" :size 14)
  doom-unicode-font (font-spec :family "Iosevka Slab")
  doom-big-font (font-spec :family "Iosevka SS08" :size 20)
- doom-variable-pitch-font (font-spec :family "Input Sans Condensed")
+ doom-variable-pitch-font (font-spec :family "Iosevka Etoile")
  +doom-dashboard-banner-padding '(0 . 0)
  +doom-dashboard-banner-file "gnu-head.png"
  +doom-dashboard-banner-dir "~/.doom.d/assets/"
