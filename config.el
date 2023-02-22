@@ -6,11 +6,9 @@
  user-mail-address "tahir@tahirbutt.com"
  user-full-name    "Tahir H. Butt"
  doom-theme 'modus-vivendi
- doom-font (font-spec :family "Iosevka SS08" :size 14)
- doom-serif-font (font-spec :family "Iosevka Slab" :size 14)
- doom-unicode-font (font-spec :family "Iosevka Slab")
- doom-big-font (font-spec :family "Iosevka SS08" :size 20)
- doom-variable-pitch-font (font-spec :family "Iosevka Etoile")
+ doom-font (font-spec :family "Essential PragmataPro" :size 14)
+ doom-unicode-font (font-spec :family "Essential PragmataPro")
+ doom-big-font (font-spec :family "Essential PragmataPro" :size 22)
  +doom-dashboard-banner-padding '(0 . 0)
  +doom-dashboard-banner-file "gnu-head.png"
  +doom-dashboard-banner-dir "~/.doom.d/assets/"
